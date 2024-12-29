@@ -1,66 +1,209 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Configurações Básicas para Rodar o Projeto
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### 1. **Requisitos**
+Certifique-se de que o ambiente possui as seguintes dependências instaladas:
+- **PHP** (versão 8.0 ou superior)
+- **Composer**
+- **MySQL**
 
-## About Laravel
+### 2. **Configuração do Projeto**
+1. Clone o repositório para sua máquina local:
+   ```bash
+   git clone <url-do-repositorio>
+   cd <nome-do-repositorio>
+   ```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+2. Instale as dependências do Laravel:
+   ```bash
+   composer install
+   ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+3. Copie o arquivo de configuração `.env.example` para `.env`:
+   ```bash
+   cp .env.example .env
+   ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+4. Configure o arquivo `.env` com as credenciais do banco de dados:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nome_do_banco
+   DB_USERNAME=usuario
+   DB_PASSWORD=senha
+   ```
 
-## Learning Laravel
+5. Gere a chave da aplicação:
+   ```bash
+   php artisan key:generate
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+6. Execute as migrações para criar as tabelas no banco de dados:
+   ```bash
+   php artisan migrate
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 3. **Rodando o Projeto**
+1. Inicie o servidor de desenvolvimento:
+   ```bash
+   php artisan serve
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. A API estará disponível em:
+   ```
+   http://127.0.0.1:8000
+   ```
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Documentação da API de Gerenciamento de Tarefas
 
-### Premium Partners
+## **Base URL**
+A API utiliza a seguinte URL base:
+```
+http://127.0.0.1:8000/api
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## **Endpoints**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. **Criar uma Tarefa**
+- **URL:** `/tasks`
+- **Método:** `POST`
+- **Descrição:** Cria uma nova tarefa.
+- **Cabeçalhos:**
+  - `Content-Type: application/json`
+- **Corpo (Body):**
+  ```json
+  {
+      "title": "Título da tarefa",
+      "description": "Descrição da tarefa",
+      "status": "pending"
+  }
+  ```
+  - **Campos:**
+    - `title` (string, obrigatório): Título da tarefa.
+    - `description` (string, obrigatório): Descrição da tarefa.
+    - `status` (string, obrigatório): Status inicial da tarefa (`pending` ou `completed`).
 
-## Code of Conduct
+- **Resposta de Sucesso (201):**
+  ```json
+  {
+      "message": "Tarefa criada com sucesso!",
+      "task": {
+          "id": 1,
+          "title": "Título da tarefa",
+          "description": "Descrição da tarefa",
+          "status": "pending",
+          "created_at": "2024-12-29T12:00:00.000000Z",
+          "updated_at": "2024-12-29T12:00:00.000000Z"
+      }
+  }
+  ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### 2. **Listar Todas as Tarefas**
+- **URL:** `/tasks`
+- **Método:** `GET`
+- **Descrição:** Retorna uma lista de todas as tarefas.
+- **Cabeçalhos:** Nenhum
+- **Resposta de Sucesso (200):**
+  ```json
+  {
+      "message": "Lista de tarefas",
+      "tasks": [
+          {
+              "id": 1,
+              "title": "Título da tarefa",
+              "description": "Descrição da tarefa",
+              "status": "pending",
+              "created_at": "2024-12-29T12:00:00.000000Z",
+              "updated_at": "2024-12-29T12:00:00.000000Z"
+          },
+          {
+              "id": 2,
+              "title": "Outra tarefa",
+              "description": "Descrição detalhada",
+              "status": "completed",
+              "created_at": "2024-12-29T13:00:00.000000Z",
+              "updated_at": "2024-12-29T13:00:00.000000Z"
+          }
+      ]
+  }
+  ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+### 3. **Atualizar o Status de uma Tarefa**
+- **URL:** `/tasks/{id}`
+- **Método:** `PATCH`
+- **Descrição:** Atualiza o status de uma tarefa existente.
+- **Parâmetros de URL:**
+  - `id` (int, obrigatório): ID da tarefa a ser atualizada.
+- **Cabeçalhos:**
+  - `Content-Type: application/json`
+- **Corpo (Body):**
+  ```json
+  {
+      "status": "completed"
+  }
+  ```
+  - **Campos:**
+    - `status` (string, obrigatório): Novo status da tarefa (`pending` ou `completed`).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Resposta de Sucesso (200):**
+  ```json
+  {
+      "message": "Status atualizado com sucesso",
+      "task": {
+          "id": 1,
+          "title": "Título da tarefa",
+          "description": "Descrição da tarefa",
+          "status": "completed",
+          "created_at": "2024-12-29T12:00:00.000000Z",
+          "updated_at": "2024-12-29T14:00:00.000000Z"
+      }
+  }
+  ```
+
+- **Resposta de Erro (404):**
+  ```json
+  {
+      "message": "Tarefa não encontrada"
+  }
+  ```
+
+---
+
+### 4. **Deletar uma Tarefa**
+- **URL:** `/tasks/{id}`
+- **Método:** `DELETE`
+- **Descrição:** Deleta uma tarefa existente.
+- **Parâmetros de URL:**
+  - `id` (int, obrigatório): ID da tarefa a ser deletada.
+- **Cabeçalhos:** Nenhum
+- **Resposta de Sucesso (200):**
+  ```json
+  {
+      "message": "Tarefa deletada com sucesso"
+  }
+  ```
+
+- **Resposta de Erro (404):**
+  ```json
+  {
+      "message": "Tarefa não encontrada"
+  }
+  ```
+
+---
+
+## **Observações**
+1. Certifique-se de que a URL base está correta e que o servidor Laravel está rodando na porta apropriada.
+2. Utilize o Postman ou outra ferramenta para testar os endpoints.
+3. Todos os dados enviados no corpo devem estar no formato **JSON**.
+4. O cabeçalho `Content-Type: application/json` deve ser configurado ao enviar requisições que contenham um corpo.
+
+Se precisar de mais detalhes, é só pedir! 😊
