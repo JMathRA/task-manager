@@ -206,4 +206,3 @@ http://127.0.0.1:8000/api
 3. Todos os dados enviados no corpo devem estar no formato **JSON**.
 4. O cabeçalho `Content-Type: application/json` deve ser configurado ao enviar requisições que contenham um corpo.
 
-Se precisar de mais detalhes, é só pedir! 😊
